@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">PaintTest</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string name="guest">Join a Game</string>
+
+    <string name="host">Host a Game</string>
+
+    <string name="title_activity_host">HostActivity</string>
+
+    <string name="WelcomeScreenTitle">Awsome game with magic!</string>
+
+    <string name="powered_app">Team A05 </string>
+
+    <string name="qr_text_default">decoded qr</string>
+
+    <string name="scan_instruction">Scan the game QR code:</string>
+
+    <string name="title_activity_qrcode_reader">QRCodeReaderActivity</string>
+
+    <string name="host_default_text">Host a party</string>
+
+    <string name="qr_text_no_perm">permission to use the camera not granted</string>
+</resources>

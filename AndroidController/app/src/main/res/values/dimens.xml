@@ -1,0 +1,6 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="cam_view_dim">280dp</dimen>
+
+    <dimen name="layout_mag_dim">10dp</dimen>
+</resources>
