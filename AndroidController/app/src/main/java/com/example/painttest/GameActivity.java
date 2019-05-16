@@ -1,18 +1,10 @@
 package com.example.painttest;
 
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-
-import Connection.Handler;
-import Connection.Protocol;
 
 public class GameActivity extends AppCompatActivity {
 

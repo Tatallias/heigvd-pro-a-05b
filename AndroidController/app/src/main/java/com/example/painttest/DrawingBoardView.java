@@ -59,7 +59,7 @@ public class DrawingBoardView extends View {
     private Drawable spellDrawable;
 
     public String serverIp ="10.192.94.175";
-    Handler client;
+    private Handler client;
     public DrawingBoardView(Context context) {
         this(context, null);
     }
@@ -123,7 +123,8 @@ public class DrawingBoardView extends View {
     }
 
     public void connect(String ip ,int port) {
-        client= new Handler(ip,port,false);
+        client = new Handler(ip,port);
+        client.start();
     }
 
 
@@ -260,7 +261,7 @@ public class DrawingBoardView extends View {
         }
        // TextView myAwesomeTextView = (TextView)findViewById(R.id.debugInfo);
        // myAwesomeTextView.setText(s.getRequest());
-        new MessageSender(client).execute("SEND",s.getRequest());
+        client.request(s.getRequest());
         //client.sendSpell(s.getRequest());
     }
 
