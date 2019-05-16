@@ -229,9 +229,9 @@ public class DrawingBoardView extends View {
         for(Element e : channeledElement){
             Bitmap bm= bitmapForElement(e);
             spellDrawable= getResources().getDrawable( e.getDrawableId(),null);
-            float ratio= bm.getWidth()/bm.getHeight();
+            float ratio= (float)bm.getWidth()/(float)bm.getHeight();
 
-            spellDrawable.setBounds(centerHor-300,centerVert-(int)(600*ratio/2),centerHor+300,centerVert+(int)(600*ratio/2));
+            spellDrawable.setBounds(centerHor-(int)(600*ratio/2),centerVert-300,centerHor+(int)(600*ratio/2),centerVert+300);
             spellDrawable.draw(c);
             i++;
         }
