@@ -1,79 +1,58 @@
 package Connection;
 
 
-import android.app.Activity;
-import android.icu.text.StringSearch;
-import android.os.Build;
-
 import com.example.painttest.QRCodeReaderActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.*;
-
-import java.nio.channels.DatagramChannel;
+import java.io.Serializable;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 
-public class Handler  {
+public class Handler extends Thread implements Serializable {
     final static Logger LOG = Logger.getLogger(Handler.class.getName());
 
-    DatagramChannel channel;
-    SocketAddress address;
     BufferedReader input;
     PrintWriter output;
+    int serverPort;
     boolean connected = false;
     String in;
-    private String ip=null;
+    private String serverAddress;
+    private boolean running;
     QRCodeReaderActivity connectionActivity=null;
 
-    public Handler(String serverAddress, int serverPort, QRCodeReaderActivity connectionActivity) {
-        this(serverAddress,serverPort);
-        this.connectionActivity= connectionActivity;
-    }
+
     public Handler(String serverAddress, int serverPort) {
-        this(serverAddress,serverPort,true);
+        this.serverAddress = serverAddress;
+        this.serverPort = serverPort;
 
-    }
-    public Handler(String serverAddress, int serverPort,boolean sendConnectionPackage) {
-        ip= serverAddress;
-        connect(serverAddress,serverPort);
-        if(sendConnectionPackage){
-
-
-
-            new MessageSender(this).execute("CONNECT");
-        }
+        running = true;
     }
 
-    public void connect(String serverAddress, int serverPort) {
+
+
+
+    private void connect() {
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                channel = DatagramChannel
-                        .open(StandardProtocolFamily.INET);
-            }
-
-
-
-            address = new InetSocketAddress(serverAddress, Protocol.PRESENCE_DEFAULT_PORT);
-
-
-            channel.configureBlocking(false);
-
-
-
-
-            //input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            //output = new PrintWriter(clientSocket.getOutputStream());
+            Socket clientSocket= new Socket(serverAddress,serverPort);
+            input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            output = new PrintWriter(clientSocket.getOutputStream());
+            connected = true;
+            output.println("READY");
+            output.flush();
 
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "Unable to connect to server: {0}", e.getMessage());
             cleanup();
-            return;
+
         }
+
     }
 
     public void confirmConnection(){
@@ -81,18 +60,13 @@ public class Handler  {
             connectionActivity.validateConnection(this);
         }
     }
-    public void request(String in){
-        output.println(in);
-        output.flush();
-    }
-
-
-    public void sendSpell(String req){
-        new MessageSender(this).execute("SEND",req);
+    public void request(String in) {
+        this.in = in;
     }
 
 
     public void disconnect() {
+        running = false;
         LOG.log(Level.INFO, "Client requested to be disconnected", in);
         connected = false;
         cleanup();
@@ -113,15 +87,26 @@ public class Handler  {
         }
     }
 
-    public DatagramChannel getChannel() {
-        return channel;
+    public int getSeverPort() {
+        return serverPort;
     }
 
-    public SocketAddress getAddress() {
-        return address;
+    public String getServerAddress() {
+        return serverAddress;
     }
 
-    public String getIp() {
-        return ip;
+    @Override
+
+    public void run() {
+        if(!connected) {
+            connect();
+        }
+        while (running) {
+            if(in != null) {
+                output.println(in);
+                output.flush();
+                in = null;
+            }
+        }
     }
 }

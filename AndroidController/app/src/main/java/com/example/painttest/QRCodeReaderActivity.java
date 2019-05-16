@@ -18,8 +18,7 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.util.ArrayList;
+import java.net.Socket;
 
 public class QRCodeReaderActivity extends AppCompatActivity {
 
@@ -65,9 +64,6 @@ public class QRCodeReaderActivity extends AppCompatActivity {
                         hostIPs = scannedHostIPS;
 
                         tryConnection(hostIPs);
-
-
-
                     }
                 }
             }
@@ -84,16 +80,20 @@ public class QRCodeReaderActivity extends AppCompatActivity {
         String[] splitIpsAndPort= ipsAndPort.split("\n");
         String[] ips= splitIpsAndPort[0].split(" ");
         int port = Integer.parseInt(splitIpsAndPort[1]);
-        ArrayList<Handler> handlers = new ArrayList<>();
-        for (String s:ips) {
-            Handler h= new Handler(s,port,this);
-            handlers.add(h);
 
+        for (String s:ips) {
+
+            try(Socket socket= new Socket(s,port)) {
+                startGameActivity(s,port);
+                break;
+            } catch (IOException e) {
+
+            }
         }
     }
 
     public void validateConnection(Handler h){
-        startGameActivity(h.getIp(),((InetSocketAddress) h.getAddress()).getPort());
+        startGameActivity(h.getServerAddress(),h.getSeverPort());
     }
 
     void cam_view_setup() {
@@ -132,8 +132,8 @@ public class QRCodeReaderActivity extends AppCompatActivity {
     //start the reading of the QRcode if button pressed
     public void startGameActivity(String ip,int port) {
         Intent intent = new Intent(this, GameActivity.class);
-        intent.putExtra("port",port);
         intent.putExtra("ip",ip);
+        intent.putExtra("port",port);
 
         this.startActivity(intent);
     }
