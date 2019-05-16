@@ -22,7 +22,7 @@ public class GameActivity extends AppCompatActivity {
         int port= getPort(savedInstanceState);
 
         drawingBoardView = (DrawingBoardView) findViewById(R.id.paintView);
-        drawingBoardView.connect(ip,port);
+        //drawingBoardView.connect(ip,port);
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         drawingBoardView.init(metrics);

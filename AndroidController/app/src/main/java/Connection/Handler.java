@@ -7,13 +7,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
 
-public class Handler extends Thread {
+public class Handler extends Thread implements Serializable {
     final static Logger LOG = Logger.getLogger(Handler.class.getName());
 
     BufferedReader input;
@@ -29,20 +31,26 @@ public class Handler extends Thread {
     public Handler(String serverAddress, int serverPort) {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
+
         running = true;
     }
 
+
+
+
     private void connect() {
         try {
-            Socket clientSocket = new Socket(serverAddress, serverPort);
+            Socket clientSocket= new Socket(serverAddress,serverPort);
             input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             output = new PrintWriter(clientSocket.getOutputStream());
             connected = true;
-            this.in = in;
+            output.println("READY");
+            output.flush();
+
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "Unable to connect to server: {0}", e.getMessage());
             cleanup();
-            return;
+
         }
 
     }
@@ -55,6 +63,7 @@ public class Handler extends Thread {
     public void request(String in) {
         this.in = in;
     }
+
 
     public void disconnect() {
         running = false;
@@ -87,9 +96,11 @@ public class Handler extends Thread {
     }
 
     @Override
-    public void run() {
-        connect();
 
+    public void run() {
+        if(!connected) {
+            connect();
+        }
         while (running) {
             if(in != null) {
                 output.println(in);

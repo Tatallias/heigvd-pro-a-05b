@@ -82,11 +82,12 @@ public class QRCodeReaderActivity extends AppCompatActivity {
         int port = Integer.parseInt(splitIpsAndPort[1]);
 
         for (String s:ips) {
-            try(Socket socket = new Socket(s, port)) {
-                startGameActivity(s, port);
+
+            try(Socket socket= new Socket(s,port)) {
+                startGameActivity(s,port);
                 break;
             } catch (IOException e) {
-                /* ignore */
+
             }
         }
     }
@@ -129,10 +130,10 @@ public class QRCodeReaderActivity extends AppCompatActivity {
     }
 
     //start the reading of the QRcode if button pressed
-    public void startGameActivity(String ip, int port) {
+    public void startGameActivity(String ip,int port) {
         Intent intent = new Intent(this, GameActivity.class);
-        intent.putExtra("port",port);
         intent.putExtra("ip",ip);
+        intent.putExtra("port",port);
 
         this.startActivity(intent);
     }

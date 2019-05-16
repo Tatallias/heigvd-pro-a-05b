@@ -122,9 +122,13 @@ public class DrawingBoardView extends View {
         blur = false;
     }
 
-    public void connect(String ip ,int port) {
-        client = new Handler(ip,port);
-        client.start();
+    public void connect(String ip,int port) {
+        if(client==null){
+            client= new Handler(ip,port);
+            client.start();
+        }
+
+        //client.start();
     }
 
 
