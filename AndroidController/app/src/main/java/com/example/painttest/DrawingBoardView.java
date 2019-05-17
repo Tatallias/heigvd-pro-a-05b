@@ -59,7 +59,7 @@ public class DrawingBoardView extends View {
     private Drawable spellDrawable;
 
     public String serverIp ="10.192.94.175";
-    Handler client;
+    private Handler client;
     public DrawingBoardView(Context context) {
         this(context, null);
     }
@@ -122,8 +122,13 @@ public class DrawingBoardView extends View {
         blur = false;
     }
 
-    public void connect(String ip ,int port) {
-        client= new Handler(ip,port,false);
+    public void connect(String ip,int port) {
+        if(client==null){
+            client= new Handler(ip,port);
+            client.start();
+        }
+
+        //client.start();
     }
 
 
@@ -229,9 +234,9 @@ public class DrawingBoardView extends View {
         for(Element e : channeledElement){
             Bitmap bm= bitmapForElement(e);
             spellDrawable= getResources().getDrawable( e.getDrawableId(),null);
-            float ratio= bm.getWidth()/bm.getHeight();
+            float ratio= (float)bm.getWidth()/(float)bm.getHeight();
 
-            spellDrawable.setBounds(centerHor-300,centerVert-(int)(600*ratio/2),centerHor+300,centerVert+(int)(600*ratio/2));
+            spellDrawable.setBounds(centerHor-(int)(600*ratio/2),centerVert-300,centerHor+(int)(600*ratio/2),centerVert+300);
             spellDrawable.draw(c);
             i++;
         }
@@ -260,7 +265,7 @@ public class DrawingBoardView extends View {
         }
        // TextView myAwesomeTextView = (TextView)findViewById(R.id.debugInfo);
        // myAwesomeTextView.setText(s.getRequest());
-        new MessageSender(client).execute("SEND",s.getRequest());
+        client.request(s.getRequest());
         //client.sendSpell(s.getRequest());
     }
 
