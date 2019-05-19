@@ -1,8 +1,8 @@
-package com.example.painttest;
+package Utility;
 
 import java.util.Scanner;
 
-class PeekableScanner {
+public class PeekableScanner {
 
     private final Scanner scanner;
     private String next;

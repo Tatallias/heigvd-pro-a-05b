@@ -1,4 +1,4 @@
-package com.example.painttest;
+package com.example.Wizards;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

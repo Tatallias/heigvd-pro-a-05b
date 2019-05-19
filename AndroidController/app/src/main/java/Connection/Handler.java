@@ -1,15 +1,12 @@
 package Connection;
 
 
-import com.example.painttest.QRCodeReaderActivity;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,7 +22,6 @@ public class Handler extends Thread implements Serializable {
     String in;
     private String serverAddress;
     private boolean running;
-    QRCodeReaderActivity connectionActivity=null;
 
 
     public Handler(String serverAddress, int serverPort) {
@@ -34,7 +30,6 @@ public class Handler extends Thread implements Serializable {
 
         running = true;
     }
-
 
 
 
@@ -55,11 +50,6 @@ public class Handler extends Thread implements Serializable {
 
     }
 
-    public void confirmConnection(){
-        if(connectionActivity!=null){
-            connectionActivity.validateConnection(this);
-        }
-    }
     public void request(String in) {
         this.in = in;
     }

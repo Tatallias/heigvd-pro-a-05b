@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.painttest">
+    package="com.example.Wizards">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA"/>
     <application
@@ -12,7 +13,7 @@
         android:theme="@style/AppTheme">
         <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES" android:value="barcode"/>
 
-        <activity android:name=".MainActivity" android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name="com.example.Wizards.WelcomeActivity" android:theme="@style/AppTheme.NoActionBar">
 
 
             <intent-filter>
@@ -25,11 +26,11 @@
 
         </activity>
 
-        <activity android:name=".QRCodeReaderActivity" android:label="@string/title_activity_qrcode_reader" android:screenOrientation="sensorPortrait" android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name="com.example.Wizards.QRCodeReaderActivity" android:label="@string/title_activity_qrcode_reader" android:screenOrientation="sensorPortrait" android:theme="@style/AppTheme.NoActionBar"/>
 
 
         <activity
-            android:name=".GameActivity"
+            android:name="com.example.Wizards.GameActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
 

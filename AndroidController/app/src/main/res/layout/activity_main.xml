@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/background_dark"
-    tools:context="com.example.painttest.GameActivity">
+    tools:context="com.example.Wizards.GameActivity">
 
     <ImageView
         android:id="@+id/castingBoardBG"
@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="@+id/paintView"
         app:srcCompat="@drawable/background" />
 
-    <com.example.painttest.DrawingBoardView
+    <com.example.Wizards.CastingBoardView
         android:id="@+id/paintView"
         android:layout_width="0dp"
         android:layout_height="0dp"

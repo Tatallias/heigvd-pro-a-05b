@@ -1,4 +1,4 @@
-package com.example.painttest;
+package Utility;
 
 public class Vector2 {
     private float x;

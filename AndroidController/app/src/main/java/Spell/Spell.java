@@ -1,21 +1,35 @@
-package com.example.painttest;
+package Spell;
 
 
-import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.graphics.RectF;
 
-public abstract class Spell {
 
+
+import Utility.FrechetDistance;
+
+import Utility.Util;
+import Utility.Vector2;
+
+/**
+ * class representing the abstract spell
+ */
+
+public abstract class Spell {
+    /**
+     * forms the request readable by the server
+     * @return the request to be sent
+     */
     public abstract String getRequest();
 
 
     /**
-     * decides what a path p means and what to do with it
-     * @param p
-     * @return
+     * transforms the drawn path into a discrete path and computes the distance to all possibilities and
+     * returns the appropriate spell
+     * @param p the drawn path
+     * @return the appropriate Spell
      */
     public static Spell computePathToSpell(Path p){
         Vector2[] subdividedPath= Util.pathToVectorArray(p,20);
@@ -79,8 +93,8 @@ public abstract class Spell {
         if(elementFound==Element.SHIELD){
             return new Shield();
         }else {
-            SpellQuality sq=SpellQuality.qualityFromDistance((int)minDistance,(int)(Util.maxTolerableDistance),(int)(Util.maxPerfectDistance));
-            if(sq!=SpellQuality.FAILED) {
+            SpellQuality sq= SpellQuality.qualityFromDistance((int)minDistance,(int)(Util.maxTolerableDistance),(int)(Util.maxPerfectDistance));
+            if(sq!= SpellQuality.FAILED) {
                 return new ChanneledElement(elementFound, sq);
             }
         }

@@ -1,18 +1,19 @@
-package com.example.painttest;
+package Spell;
 
-import android.graphics.Matrix;
 import android.graphics.Path;
-import android.graphics.PathMeasure;
 import android.graphics.RectF;
+
+import com.example.Wizards.R;
+import Utility.Util;
 
 import Connection.Protocol;
 
 public class Element {
-    final  static Element FIRE = new Element(new Util().pathFromSVGPath(Util.firePathString),"Fire",R.drawable.fire, Protocol.CMD_FIRE,Protocol.CMD_FIRE_INT);
-    final static Element EARTH = new Element(new Util().pathFromSVGPath(Util.earthPathString),"Earth",R.drawable.earth,Protocol.CMD_EARTH,Protocol.CMD_EARTH_INT);
-    final static Element WATER = new Element(new Util().pathFromSVGPath(Util.waterPathString),"Water",R.drawable.water,Protocol.CMD_WATER,Protocol.CMD_WATER_INT);
-    final static Element LIGHTNING = new Element(new Util().pathFromSVGPath(Util.lightningPathString),"Lightning",R.drawable.lightning,Protocol.CMD_ELECTRICITY,Protocol.CMD_ELECTRICITY_INT);
-    final static Element SHIELD = new Element(new Util().pathFromSVGPath(Util.shieldPathString),"Shield",0,Protocol.CMD_ELECTRICITY,Protocol.CMD_ELECTRICITY_INT);
+    public final  static Element FIRE = new Element(new Util().pathFromSVGPath(Util.firePathString),"Fire", R.drawable.fire, Protocol.CMD_FIRE,Protocol.CMD_FIRE_INT);
+    public final static Element EARTH = new Element(new Util().pathFromSVGPath(Util.earthPathString),"Earth",R.drawable.earth,Protocol.CMD_EARTH,Protocol.CMD_EARTH_INT);
+    public final static Element WATER = new Element(new Util().pathFromSVGPath(Util.waterPathString),"Water",R.drawable.water,Protocol.CMD_WATER,Protocol.CMD_WATER_INT);
+    public final static Element LIGHTNING = new Element(new Util().pathFromSVGPath(Util.lightningPathString),"Lightning",R.drawable.lightning,Protocol.CMD_ELECTRICITY,Protocol.CMD_ELECTRICITY_INT);
+    public final static Element SHIELD = new Element(new Util().pathFromSVGPath(Util.shieldPathString),"Shield",0,Protocol.CMD_ELECTRICITY,Protocol.CMD_ELECTRICITY_INT);
 
     private final Path path;
     private final String name;

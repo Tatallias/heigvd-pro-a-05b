@@ -1,6 +1,8 @@
-package com.example.painttest;
+package Spell;
 
-import android.graphics.Path;
+/**
+ * class representing a newly channeled element with a quality qualifier
+ */
 
 public class ChanneledElement extends Spell {
     private Element element;

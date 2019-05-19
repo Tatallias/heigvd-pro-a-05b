@@ -1,10 +1,11 @@
-package com.example.painttest;
+package Spell;
 
 
-import android.graphics.Path;
+import Utility.Vector2;
 
-import Connection.Protocol;
-
+/**
+ * class representing an attack with a Vector2 representing the direction of the attack
+ */
 public class Attack extends Spell {
     Vector2 direction;
 
@@ -12,7 +13,10 @@ public class Attack extends Spell {
         this.direction=direction;
     }
 
-
+    /**
+     * forms the request readable by the server
+     * @return the request to be sent
+     */
     public String getRequest(){
         String s = "ATT "+ direction.getX()+" "+direction.getY()+"$";
         return s;

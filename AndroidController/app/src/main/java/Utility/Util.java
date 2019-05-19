@@ -1,12 +1,10 @@
-package com.example.painttest;
+package Utility;
 
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.os.Build;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Util {

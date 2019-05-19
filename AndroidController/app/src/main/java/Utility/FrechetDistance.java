@@ -1,12 +1,19 @@
-package com.example.painttest;
+package Utility;
 
-import java.util.List;
- // based on http://www.kr.tuwien.ac.at/staff/eiter/et-archive/cdtr9464.pdf
+
+
+
+
+/**
+ * class used to compute the frechet distance between two discrete paths
+ * implementing the algoritmh described in this paper http://www.kr.tuwien.ac.at/staff/eiter/et-archive/cdtr9464.pdf
+ */
 public class FrechetDistance {
     float [][] ca;
     Vector2[] P;
     Vector2[] Q;
-    float distance(Vector2[] P, Vector2[] Q){
+
+    public float distance(Vector2[] P, Vector2[] Q){
        ca= new float [P.length][Q.length];
        this.P=P;
        this.Q=Q;

@@ -1,4 +1,4 @@
-package com.example.painttest;
+package Spell;
 
 import android.graphics.Color;
 

@@ -1,4 +1,5 @@
-package com.example.painttest;
+package com.example.Wizards;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,21 +12,22 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
+
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
+
+import com.plattysoft.leonids.ParticleSystem;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import Connection.Handler;
-import Connection.MessageSender;
+import Spell.*;
+import Utility.DrawnPath;
 
-public class DrawingBoardView extends View {
+public class CastingBoardView extends View {
 
 
     public static int BRUSH_SIZE = 40;
@@ -58,23 +60,17 @@ public class DrawingBoardView extends View {
 
     private Drawable spellDrawable;
 
-    public String serverIp ="10.192.94.175";
+    private Activity hostActivity;
     private Handler client;
-    public DrawingBoardView(Context context) {
+    public CastingBoardView(Context context) {
         this(context, null);
     }
 
-    public DrawingBoardView(Context context, AttributeSet attrs) {
+    public CastingBoardView(Context context, AttributeSet attrs) {
 
 
         super(context, attrs);
         channeledElement = new ArrayList<>();
-
-
-
-
-
-
         loadGraphics();
 
         mPaint = new Paint();
@@ -117,16 +113,8 @@ public class DrawingBoardView extends View {
         strokeWidth = BRUSH_SIZE;
     }
 
-    public void normal() {
-        emboss = false;
-        blur = false;
-    }
-
-    public void connect(String ip,int port) {
-        if(client==null){
-            client= new Handler(ip,port);
-            client.start();
-        }
+    public void connect(Handler handler) {
+        client= handler;
 
         //client.start();
     }
@@ -136,18 +124,17 @@ public class DrawingBoardView extends View {
     public void clear() {
         mCanvas.drawColor(backgroundColor, PorterDuff.Mode.CLEAR);
         paths.clear();
-        normal();
         invalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Log.d("test","drawed");
+
         canvas.save();
 
         mCanvas.drawColor(backgroundColor, PorterDuff.Mode.CLEAR);
 
-        for (DrawnPath fp : paths) {
+     /*   for (DrawnPath fp : paths) {
             mPaint.setColor(fp.color);
             mPaint.setStrokeWidth(fp.strokeWidth);
             mPaint.setMaskFilter(null);
@@ -159,7 +146,7 @@ public class DrawingBoardView extends View {
 
             mCanvas.drawPath(fp.path, mPaint);
 
-        }
+        }*/
 
         drawChanneledElements(mCanvas);
 
@@ -184,10 +171,15 @@ public class DrawingBoardView extends View {
     private void touchMove(float x, float y) {
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
+     /*  new ParticleSystem(hostActivity, 5,R.drawable.sparkle, 2l)
+                .setSpeedRange(0.2f, 0.5f)
+                .oneShot(this, 5);*/
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
             mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
             mX = x;
             mY = y;
+
+
         }
     }
 
@@ -263,11 +255,10 @@ public class DrawingBoardView extends View {
         }else{
             channeledElement.clear();
         }
-       // TextView myAwesomeTextView = (TextView)findViewById(R.id.debugInfo);
-       // myAwesomeTextView.setText(s.getRequest());
         client.request(s.getRequest());
-        //client.sendSpell(s.getRequest());
     }
 
-
+    public void setHostActivity(Activity hostActivity) {
+        this.hostActivity = hostActivity;
+    }
 }
