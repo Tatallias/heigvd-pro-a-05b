@@ -1,4 +1,5 @@
 package com.example.Wizards;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -51,7 +52,7 @@ public class CastingBoardView extends View {
     private Paint mBitmapPaint = new Paint(Paint.DITHER_FLAG);
 
     private List<Element> channeledElement;
-    private Spell currentSpell=null;
+    private Spell currentSpell = null;
 
     private Bitmap fireDrawable;
     private Bitmap waterDrawable;
@@ -62,6 +63,7 @@ public class CastingBoardView extends View {
 
     private Activity hostActivity;
     private Handler client;
+
     public CastingBoardView(Context context) {
         this(context, null);
     }
@@ -83,18 +85,18 @@ public class CastingBoardView extends View {
         mPaint.setXfermode(null);
         mPaint.setAlpha(0xff);
 
-        mEmboss = new EmbossMaskFilter(new float[] {1, 1, 1}, 0.4f, 6, 3.5f);
+        mEmboss = new EmbossMaskFilter(new float[]{1, 1, 1}, 0.4f, 6, 3.5f);
         mBlur = new BlurMaskFilter(5, BlurMaskFilter.Blur.NORMAL);
     }
 
-    private void loadGraphics(){
+    private void loadGraphics() {
         fireDrawable = BitmapFactory.decodeResource(getResources(),
                 R.drawable.fire);
 
-        waterDrawable= BitmapFactory.decodeResource(getResources(),
+        waterDrawable = BitmapFactory.decodeResource(getResources(),
                 R.drawable.water);
 
-        lightningDrawable =  BitmapFactory.decodeResource(getResources(),
+        lightningDrawable = BitmapFactory.decodeResource(getResources(),
                 R.drawable.lightning);
 
         earthDrawable = BitmapFactory.decodeResource(getResources(),
@@ -102,6 +104,7 @@ public class CastingBoardView extends View {
 
 
     }
+
     public void init(DisplayMetrics metrics) {
         int height = metrics.heightPixels;
         int width = metrics.widthPixels;
@@ -114,11 +117,10 @@ public class CastingBoardView extends View {
     }
 
     public void connect(Handler handler) {
-        client= handler;
+        client = handler;
 
-        //client.start();
+
     }
-
 
 
     public void clear() {
@@ -155,7 +157,6 @@ public class CastingBoardView extends View {
     }
 
 
-
     private void touchStart(float x, float y) {
         clear();
         mPath = new Path();
@@ -185,8 +186,8 @@ public class CastingBoardView extends View {
 
     private void touchUp() {
         mPath.lineTo(mX, mY);
-         Spell result= Spell.computePathToSpell(mPath);
-        if(result!=null){
+        Spell result = Spell.computePathToSpell(mPath);
+        if (result != null) {
             castSpell(result);
         }
     }
@@ -196,20 +197,20 @@ public class CastingBoardView extends View {
         float x = event.getX();
         float y = event.getY();
 
-        switch(event.getAction()) {
-            case MotionEvent.ACTION_DOWN :
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
                 System.out.println("hey");
 
 
                 touchStart(x, y);
                 invalidate();
                 break;
-            case MotionEvent.ACTION_MOVE :
+            case MotionEvent.ACTION_MOVE:
                 touchMove(x, y);
 
                 invalidate();
                 break;
-            case MotionEvent.ACTION_UP :
+            case MotionEvent.ACTION_UP:
                 touchUp();
                 invalidate();
                 break;
@@ -218,47 +219,49 @@ public class CastingBoardView extends View {
         return true;
     }
 
-    private void drawChanneledElements(Canvas c){
+    private void drawChanneledElements(Canvas c) {
         int i = 0;
         //ConstraintLayout box= findViewById(R.id.channeledBox);
-        int centerHor= getRight()/2;
-        int centerVert= getBottom()/2;
-        for(Element e : channeledElement){
-            Bitmap bm= bitmapForElement(e);
-            spellDrawable= getResources().getDrawable( e.getDrawableId(),null);
-            float ratio= (float)bm.getWidth()/(float)bm.getHeight();
+        int centerHor = getRight() / 2;
+        int centerVert = getBottom() / 2;
+        for (Element e : channeledElement) {
+            Bitmap bm = bitmapForElement(e);
+            spellDrawable = getResources().getDrawable(e.getDrawableId(), null);
+            float ratio = (float) bm.getWidth() / (float) bm.getHeight();
 
-            spellDrawable.setBounds(centerHor-(int)(600*ratio/2),centerVert-300,centerHor+(int)(600*ratio/2),centerVert+300);
+            spellDrawable.setBounds(centerHor - (int) (600 * ratio / 2), centerVert - 300, centerHor + (int) (600 * ratio / 2), centerVert + 300);
             spellDrawable.draw(c);
             i++;
         }
 
     }
-    private Bitmap bitmapForElement(Element e){
-        if(e.equals(Element.EARTH)){
+
+    private Bitmap bitmapForElement(Element e) {
+        if (e.equals(Element.EARTH)) {
             return earthDrawable;
         }
-        if(e.equals(Element.FIRE)){
+        if (e.equals(Element.FIRE)) {
             return fireDrawable;
         }
-        if(e.equals(Element.WATER)){
+        if (e.equals(Element.WATER)) {
             return waterDrawable;
         }
-        if(e.equals(Element.LIGHTNING)){
+        if (e.equals(Element.LIGHTNING)) {
             return lightningDrawable;
         }
         return null;
     }
-    private void castSpell(Spell s){
-        if(s instanceof ChanneledElement){
-            channeledElement.add(((ChanneledElement)s).getElement());
-        }else{
+
+    private void castSpell(Spell s) {
+        if (s instanceof ChanneledElement) {
+            channeledElement.add(((ChanneledElement) s).getElement());
+        } else {
             channeledElement.clear();
         }
         client.request(s.getRequest());
     }
 
-    public void setHostActivity(Activity hostActivity) {
-        this.hostActivity = hostActivity;
+    public void setHostActivity(Activity hostAct) {
+        hostActivity = hostAct;
     }
 }

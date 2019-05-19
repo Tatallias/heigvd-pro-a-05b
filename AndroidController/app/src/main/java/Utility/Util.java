@@ -7,6 +7,9 @@ import android.util.Log;
 
 import java.util.Scanner;
 
+/**
+ * A class containing multiples Utilities variables and methods
+ */
 public class Util {
 
     public static int directAttackDistance=10000;
@@ -27,9 +30,22 @@ public class Util {
     float prevYControl;
 
 
+    /**
+     *  parses the svg string to a Path
+     * @param svgDesc the svgDescription
+     * @return the built Path
+     */
     public Path pathFromSVGPath(String svgDesc){
         return pathFromSVGPath(svgDesc,0,0);
     }
+
+    /**
+     * parses the svg string to a Path starting at a specific location
+     * @param svgDesc the svg string
+     * @param x the x position
+     * @param y the y position
+     * @return the built path
+     */
     public Path pathFromSVGPath(String svgDesc,float x, float y){
 
 
@@ -204,6 +220,10 @@ public class Util {
         return result;
     }
 
+    /**
+     * returns whether or not the app is running in an emulator*
+     * @return true if in emulator or false if it isn't
+     */
     public static boolean isEmulator() {
         return Build.FINGERPRINT.startsWith("generic")
                 || Build.FINGERPRINT.startsWith("unknown")
