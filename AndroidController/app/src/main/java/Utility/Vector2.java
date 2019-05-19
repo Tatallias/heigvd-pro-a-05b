@@ -54,7 +54,5 @@ public class Vector2 {
     public float dist2(Vector2 v2){
         return (float) (Math.pow(getX()-v2.getX(),2)+Math.pow(getY()-v2.getY(),2));
     }
-    public float dist(Vector2 v2){
-        return (float) Math.sqrt(dist2(v2));
-    }
+
 }

@@ -1,7 +1,10 @@
 package Spell;
 
-import Spell.Spell;
 
+
+/**
+ * class representing a shield spell
+ */
 public class Shield extends Spell {
 
 
