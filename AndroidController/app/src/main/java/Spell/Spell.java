@@ -93,7 +93,7 @@ public abstract class Spell {
         if(elementFound==Element.SHIELD){
             return new Shield();
         }else {
-            SpellQuality sq= SpellQuality.qualityFromDistance((int)minDistance,(int)(Util.maxTolerableDistance),(int)(Util.maxPerfectDistance));
+            SpellQuality sq= SpellQuality.qualityFromDistance((int)minDistance);
             if(sq!= SpellQuality.FAILED) {
                 return new ChanneledElement(elementFound, sq);
             }
@@ -103,12 +103,15 @@ public abstract class Spell {
     }
 
 
-
-    public static float distanceFromStraight(Vector2[] subdividedPath){
+    /**
+     * calculates the distance between a subdivided path and the straight path from the start to the end  of the subdivided path
+     * @param subdividedPath the drawn path subdivided
+     * @return the distance
+     */
+    private static float distanceFromStraight(Vector2[] subdividedPath){
         Vector2[] straightPath={subdividedPath[0],subdividedPath[subdividedPath.length-1]};
         Vector2[] straightenedSubdividedPath= Util.pathToVectorArray(Util.pathFromVectorArray(straightPath),20);
-        float attackDistance=new FrechetDistance().distance(straightenedSubdividedPath,subdividedPath);
-        return attackDistance;
+        return new FrechetDistance().distance(straightenedSubdividedPath,subdividedPath);
     }
 
 

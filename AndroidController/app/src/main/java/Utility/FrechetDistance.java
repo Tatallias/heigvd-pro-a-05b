@@ -6,7 +6,7 @@ package Utility;
 
 /**
  * class used to compute the frechet distance between two discrete paths
- * implementing the algoritmh described in this paper http://www.kr.tuwien.ac.at/staff/eiter/et-archive/cdtr9464.pdf
+ * implementing the algorithm described in this paper http://www.kr.tuwien.ac.at/staff/eiter/et-archive/cdtr9464.pdf
  */
 public class FrechetDistance {
     float [][] ca;
@@ -37,7 +37,7 @@ public class FrechetDistance {
         }else if (i==0 && j>0) {
             ca[i][j]=Math.max(internalDistance(i,j-1),P[i].dist2(Q[i]));
         }else if(i>0&&j>0){
-            //glhf
+
             ca[i][j]=Math.max(Math.min(Math.min(internalDistance(i,j-1),internalDistance(i-1,j)),internalDistance(i-1,j-1)),P[i].dist2(Q[i]));
         }else{
             ca[i][j]=Float.MAX_VALUE;

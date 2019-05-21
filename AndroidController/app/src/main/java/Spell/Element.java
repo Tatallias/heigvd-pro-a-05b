@@ -27,6 +27,7 @@ public class Element {
 
     private int protocolInt;
 
+
     public int getDrawableId() {
         return drawableId;
     }
@@ -42,6 +43,7 @@ public class Element {
     public RectF getBounds() {
         return bounds;
     }
+
 
     private Element(Path path, String name,int id,int protocolInt) {
         this.drawableId=id;

@@ -20,6 +20,7 @@ public class Handler extends Thread implements Serializable {
     int serverPort;
     boolean connected = false;
     String in;
+    int playerNumber=0;
     private String serverAddress;
     private boolean running;
 
@@ -41,6 +42,8 @@ public class Handler extends Thread implements Serializable {
             connected = true;
             output.println("READY");
             output.flush();
+            String answer = input.readLine();
+
 
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "Unable to connect to server: {0}", e.getMessage());

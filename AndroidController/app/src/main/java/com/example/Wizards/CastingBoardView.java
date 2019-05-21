@@ -13,16 +13,21 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.plattysoft.leonids.ParticleSystem;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import Connection.Handler;
 import Spell.*;
@@ -32,9 +37,10 @@ public class CastingBoardView extends View {
 
 
     public static int BRUSH_SIZE = 40;
-    public static final int DEFAULT_COLOR = Color.GRAY;
+    public static final int DEFAULT_COLOR = Color.WHITE;
 
 
+    boolean showPath=false;
     private static final float TOUCH_TOLERANCE = 4;
     private float mX, mY;
     private Path mPath;
@@ -43,16 +49,14 @@ public class CastingBoardView extends View {
     private int currentColor;
     private int backgroundColor = Color.TRANSPARENT;
     private int strokeWidth;
-    private boolean emboss;
-    private boolean blur;
-    private MaskFilter mEmboss;
+
     private MaskFilter mBlur;
     private Bitmap mBitmap;
     private Canvas mCanvas;
     private Paint mBitmapPaint = new Paint(Paint.DITHER_FLAG);
 
     private List<Element> channeledElement;
-    private Spell currentSpell = null;
+
 
     private Bitmap fireDrawable;
     private Bitmap waterDrawable;
@@ -61,9 +65,11 @@ public class CastingBoardView extends View {
 
     private Drawable spellDrawable;
 
+    private List<ImageView> channeledElementImageViews;
     private Activity hostActivity;
     private Handler client;
 
+    ParticleSystem particleSystem ;
     public CastingBoardView(Context context) {
         this(context, null);
     }
@@ -85,8 +91,9 @@ public class CastingBoardView extends View {
         mPaint.setXfermode(null);
         mPaint.setAlpha(0xff);
 
-        mEmboss = new EmbossMaskFilter(new float[]{1, 1, 1}, 0.4f, 6, 3.5f);
-        mBlur = new BlurMaskFilter(5, BlurMaskFilter.Blur.NORMAL);
+
+
+        mBlur = new BlurMaskFilter(10, BlurMaskFilter.Blur.NORMAL);
     }
 
     private void loadGraphics() {
@@ -136,21 +143,18 @@ public class CastingBoardView extends View {
 
         mCanvas.drawColor(backgroundColor, PorterDuff.Mode.CLEAR);
 
-     /*   for (DrawnPath fp : paths) {
-            mPaint.setColor(fp.color);
-            mPaint.setStrokeWidth(fp.strokeWidth);
-            mPaint.setMaskFilter(null);
+        if(showPath) {
+            for (DrawnPath fp : paths) {
+                mPaint.setColor(fp.color);
+                mPaint.setStrokeWidth(10);
 
-            if (fp.emboss)
-                mPaint.setMaskFilter(mEmboss);
-            else if (fp.blur)
                 mPaint.setMaskFilter(mBlur);
 
-            mCanvas.drawPath(fp.path, mPaint);
+                mCanvas.drawPath(fp.path, mPaint);
 
-        }*/
+            }
+        }
 
-        drawChanneledElements(mCanvas);
 
         canvas.drawBitmap(mBitmap, 0, 0, mBitmapPaint);
         canvas.restore();
@@ -158,9 +162,12 @@ public class CastingBoardView extends View {
 
 
     private void touchStart(float x, float y) {
+        showPath=false;
+        setUpParticleEmitter();
+        particleSystem.emit((int)x,(int)y,50);
         clear();
         mPath = new Path();
-        DrawnPath fp = new DrawnPath(currentColor, emboss, blur, strokeWidth, mPath);
+        DrawnPath fp = new DrawnPath(currentColor, false, false, strokeWidth, mPath);
         paths.add(fp);
 
         mPath.reset();
@@ -172,9 +179,7 @@ public class CastingBoardView extends View {
     private void touchMove(float x, float y) {
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
-     /*  new ParticleSystem(hostActivity, 5,R.drawable.sparkle, 2l)
-                .setSpeedRange(0.2f, 0.5f)
-                .oneShot(this, 5);*/
+        particleSystem.updateEmitPoint((int)x,(int)y);
         if (dx >= TOUCH_TOLERANCE || dy >= TOUCH_TOLERANCE) {
             mPath.quadTo(mX, mY, (x + mX) / 2, (y + mY) / 2);
             mX = x;
@@ -185,6 +190,8 @@ public class CastingBoardView extends View {
     }
 
     private void touchUp() {
+        showPath=true;
+        particleSystem.stopEmitting();
         mPath.lineTo(mX, mY);
         Spell result = Spell.computePathToSpell(mPath);
         if (result != null) {
@@ -219,49 +226,43 @@ public class CastingBoardView extends View {
         return true;
     }
 
-    private void drawChanneledElements(Canvas c) {
-        int i = 0;
-        //ConstraintLayout box= findViewById(R.id.channeledBox);
-        int centerHor = getRight() / 2;
-        int centerVert = getBottom() / 2;
-        for (Element e : channeledElement) {
-            Bitmap bm = bitmapForElement(e);
-            spellDrawable = getResources().getDrawable(e.getDrawableId(), null);
-            float ratio = (float) bm.getWidth() / (float) bm.getHeight();
-
-            spellDrawable.setBounds(centerHor - (int) (600 * ratio / 2), centerVert - 300, centerHor + (int) (600 * ratio / 2), centerVert + 300);
-            spellDrawable.draw(c);
-            i++;
-        }
-
-    }
-
-    private Bitmap bitmapForElement(Element e) {
-        if (e.equals(Element.EARTH)) {
-            return earthDrawable;
-        }
-        if (e.equals(Element.FIRE)) {
-            return fireDrawable;
-        }
-        if (e.equals(Element.WATER)) {
-            return waterDrawable;
-        }
-        if (e.equals(Element.LIGHTNING)) {
-            return lightningDrawable;
-        }
-        return null;
-    }
-
     private void castSpell(Spell s) {
         if (s instanceof ChanneledElement) {
-            channeledElement.add(((ChanneledElement) s).getElement());
+            addChanneledElement((ChanneledElement) s);
+
         } else {
-            channeledElement.clear();
+            emptyChanneledElement();
         }
         client.request(s.getRequest());
     }
 
     public void setHostActivity(Activity hostAct) {
         hostActivity = hostAct;
+
     }
+    public void setUpParticleEmitter(){
+        particleSystem= new ParticleSystem(hostActivity, 100,R.drawable.sparkle2, 250l);
+        particleSystem.setFadeOut(100l);
+        particleSystem.setScaleRange(0.5f,.75f);
+        particleSystem.setSpeedRange(0.17f, 0.3f);
+    }
+
+
+    public void addChanneledElement(ChanneledElement e){
+
+        if(channeledElement.size()<=3 ){
+            channeledElement.add(e.getElement());
+            channeledElementImageViews.get(channeledElement.size()-1).setImageResource(e.getElement().getDrawableId());
+        }
+    }
+    public void emptyChanneledElement(){
+        channeledElement.clear();
+        for (ImageView i: channeledElementImageViews ) {
+            i.setImageResource(android.R.color.transparent);
+        }
+    }
+    public void setChanneledElementImageViews(List<ImageView > i){
+        channeledElementImageViews=i;
+    }
+
 }

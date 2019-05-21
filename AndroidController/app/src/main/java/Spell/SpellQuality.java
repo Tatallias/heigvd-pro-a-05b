@@ -1,27 +1,30 @@
 package Spell;
 
-import android.graphics.Color;
 
+
+import Utility.Util;
+
+/**
+ * enum of the different quality of spells
+ */
 public enum SpellQuality {PERFECT,GOOD,OK,FAILED;
 
-    public static SpellQuality qualityFromDistance(int dist,int maxDist,int perfectDist){
-        int step= (maxDist-perfectDist)/2;
-        if(dist<perfectDist){
+    /**
+     * returns the apropriate quality based on the distance between the drawn path and the stored element path
+     * @param dist the distance between the drawn path and the stored element path
+     * @return the corresponding spell quality
+     */
+    public static SpellQuality qualityFromDistance(int dist){
+        float step= (Util.maxTolerableDistance-Util.maxPerfectDistance)/2f;
+        if(dist<Util.maxPerfectDistance){
             return PERFECT;
-        }else if(dist<perfectDist+step*1){
+        }else if(dist<Util.maxPerfectDistance+step*1){
             return GOOD;
-        }else if(dist<perfectDist+step*2){
+        }else if(dist<Util.maxPerfectDistance+step*2){
             return OK;
         }else{
             return FAILED;
         }
     }
-    public static int colorFromQuality(SpellQuality sq){
-        switch (sq){
-            case PERFECT: return Color.GREEN;
-            case GOOD:return Color.MAGENTA;
-            case OK: return Color.YELLOW;
-            default: return Color.BLACK;
-        }
-    }
+
 }

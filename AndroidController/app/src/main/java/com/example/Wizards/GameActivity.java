@@ -2,10 +2,15 @@ package com.example.Wizards;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.widget.ImageView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import Connection.Handler;
 
@@ -16,7 +21,7 @@ import Connection.Handler;
  */
 public class GameActivity extends AppCompatActivity {
 
-    private Activity thisActivity;
+
     private CastingBoardView castingBoardView;
 
     private Handler handler;
@@ -37,7 +42,7 @@ public class GameActivity extends AppCompatActivity {
         String ip= getIp(savedInstanceState);
         int port= getPort(savedInstanceState);
 
-        castingBoardView = (CastingBoardView) findViewById(R.id.paintView);
+        castingBoardView =  findViewById(R.id.paintView);
         connect(ip,port);
         castingBoardView.setHostActivity(this);
         castingBoardView.connect(handler);
@@ -53,7 +58,6 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        thisActivity = this;
 
         String ip= getIp(null);
         int port= getPort(null);
@@ -62,8 +66,11 @@ public class GameActivity extends AppCompatActivity {
         connect(ip,port);
         castingBoardView.setHostActivity(this);
 
-        castingBoardView = (CastingBoardView) findViewById(R.id.paintView);
+        castingBoardView = findViewById(R.id.paintView);
+        castingBoardView.setHostActivity(this);
+
         castingBoardView.connect(handler);
+        castingBoardView.setChanneledElementImageViews(findChanneledElementsViews());
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         castingBoardView.init(metrics);
@@ -119,6 +126,29 @@ public class GameActivity extends AppCompatActivity {
             handler.start();
         }
 
-        //client.start();
+
     }
+
+    /**
+     * finds the image views for channeled element  to transmit to the  custom casting view
+     * @return
+     */
+
+    public List<ImageView> findChanneledElementsViews(){
+        List<ImageView> channeledElementImageViews= new ArrayList<>();
+
+        channeledElementImageViews.add((ImageView) findViewById(R.id.channeledElement1));
+        channeledElementImageViews.add((ImageView) findViewById(R.id.channeledElement2));
+        channeledElementImageViews.add((ImageView) findViewById(R.id.channeledElement3));
+        channeledElementImageViews.add((ImageView) findViewById(R.id.channeledElement4));
+
+        return  channeledElementImageViews;
+
+    }
+    @Override
+    public void onBackPressed() {
+
+    }
+
+
 }
