@@ -1,6 +1,8 @@
 package Connection;
 
 
+import com.example.Wizards.GameActivity;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,6 +12,9 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * class managing all the communication with the with the server
+ */
 
 
 public class Handler extends Thread implements Serializable {
@@ -20,29 +25,30 @@ public class Handler extends Thread implements Serializable {
     int serverPort;
     boolean connected = false;
     String in;
-    int playerNumber=0;
+    private int playerNumber = 0;
     private String serverAddress;
     private boolean running;
 
+    private GameActivity gameActivity ;
 
-    public Handler(String serverAddress, int serverPort) {
+    public Handler(String serverAddress, int serverPort, GameActivity gameActivity) {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
-
+        this.gameActivity= gameActivity;
         running = true;
     }
 
 
-
     private void connect() {
         try {
-            Socket clientSocket= new Socket(serverAddress,serverPort);
+            //gameActivity.setPlayerId(1);
+            Socket clientSocket = new Socket(serverAddress, serverPort);
             input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             output = new PrintWriter(clientSocket.getOutputStream());
             connected = true;
             output.println("READY");
             output.flush();
-            String answer = input.readLine();
+            //   String answer = input.readLine();
 
 
         } catch (IOException e) {
@@ -91,11 +97,11 @@ public class Handler extends Thread implements Serializable {
     @Override
 
     public void run() {
-        if(!connected) {
+        if (!connected) {
             connect();
         }
         while (running) {
-            if(in != null) {
+            if (in != null) {
                 output.println(in);
                 output.flush();
                 in = null;

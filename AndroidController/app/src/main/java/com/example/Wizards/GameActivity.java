@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +45,15 @@ public class GameActivity extends AppCompatActivity {
 
         castingBoardView =  findViewById(R.id.paintView);
         connect(ip,port);
+
         castingBoardView.setHostActivity(this);
         castingBoardView.connect(handler);
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         castingBoardView.init(metrics);
+
+
+
     }
 
     /**
@@ -70,10 +75,12 @@ public class GameActivity extends AppCompatActivity {
         castingBoardView.setHostActivity(this);
 
         castingBoardView.connect(handler);
+
         castingBoardView.setChanneledElementImageViews(findChanneledElementsViews());
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         castingBoardView.init(metrics);
+
     }
 
 
@@ -121,14 +128,15 @@ public class GameActivity extends AppCompatActivity {
      * @param port the port number of the server
      */
     public void connect(String ip,int port) {
-        if(handler==null){
-            handler= new Handler(ip,port);
+        if (handler == null) {
+            handler = new Handler(ip, port, this);
             handler.start();
         }
-
-
     }
-
+    public void setPlayerId(int i){
+        TextView playerId= (TextView) findViewById(R.id.PlayerId);
+        playerId.setText("player "+i);
+    }
     /**
      * finds the image views for channeled element  to transmit to the  custom casting view
      * @return

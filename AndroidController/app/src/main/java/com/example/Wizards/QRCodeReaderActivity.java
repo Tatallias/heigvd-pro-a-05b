@@ -72,7 +72,11 @@ public class QRCodeReaderActivity extends AppCompatActivity {
                     if (!scannedHostIPS.equals(hostIPs)) {
                         hostIPs = scannedHostIPS;
 
-                        tryConnection(hostIPs);
+                        if(!tryConnection(hostIPs)){
+                            onBackPressed();
+                        }
+
+
                     }
                 }
             }
@@ -90,7 +94,7 @@ public class QRCodeReaderActivity extends AppCompatActivity {
      *
      * @param ipsAndPort the string of ips and port "<ip1> <ip2> ... <ipn>\n<port>"
      */
-    void tryConnection(String ipsAndPort) {
+    private boolean tryConnection(String ipsAndPort) {
         String[] splitIpsAndPort = ipsAndPort.split("\n");
         String[] ips = splitIpsAndPort[0].split(" ");
         int port = Integer.parseInt(splitIpsAndPort[1]);
@@ -103,16 +107,20 @@ public class QRCodeReaderActivity extends AppCompatActivity {
                 socket.connect(new InetSocketAddress(s, port), 500);
                 if (socket.isConnected()) {
                     startGameActivity(s, port);
-                    break;
+                    return true;
                 }
 
             } catch (Exception e) {
 
             }
         }
+        return false;
     }
 
 
+    /**
+     * sets up the camera view
+     */
     void cam_view_setup() {
         cam_view.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
