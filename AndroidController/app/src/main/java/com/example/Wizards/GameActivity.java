@@ -1,8 +1,6 @@
 package com.example.Wizards;
 
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +25,7 @@ public class GameActivity extends AppCompatActivity {
 
     private Handler handler;
 
+    private int playerId=-1;
 
     /**
      * gets the ip and port from the intent and creates a new connection and passes it to the castingBoardView
@@ -76,6 +75,9 @@ public class GameActivity extends AppCompatActivity {
 
         castingBoardView.connect(handler);
 
+        if( playerId!=-1){
+            setPlayerIdText(playerId);
+        }
         castingBoardView.setChanneledElementImageViews(findChanneledElementsViews());
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -133,7 +135,8 @@ public class GameActivity extends AppCompatActivity {
             handler.start();
         }
     }
-    public  void setPlayerId(int i){
+    public  void setPlayerIdText(int i){
+        playerId= i;
         TextView playerId= (TextView) findViewById(R.id.PlayerId);
         playerId.setText("player "+i);
     }

@@ -1,8 +1,6 @@
 package Connection;
 
 
-import android.view.View;
-
 import com.example.Wizards.GameActivity;
 
 import java.io.BufferedReader;
@@ -55,12 +53,12 @@ public class Handler extends Thread implements Serializable {
                 gameActivity.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                      gameActivity.setPlayerId(Integer.parseInt(answer));
+                      gameActivity.setPlayerIdText(Integer.parseInt(answer));
                     }
                 });
 
 
-            gameActivity.setPlayerId(Integer.parseInt(answer));
+
 
 
         } catch (IOException e) {

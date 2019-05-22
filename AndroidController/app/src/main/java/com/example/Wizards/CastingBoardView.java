@@ -57,19 +57,11 @@ public class CastingBoardView extends View {
 
     private List<Element> channeledElement;
 
-
-    private Bitmap fireDrawable;
-    private Bitmap waterDrawable;
-    private Bitmap earthDrawable;
-    private Bitmap lightningDrawable;
-
-    private Drawable spellDrawable;
-
     private List<ImageView> channeledElementImageViews;
     private Activity hostActivity;
     private Handler client;
 
-    ParticleSystem particleSystem ;
+    private ParticleSystem particleSystem ;
     public CastingBoardView(Context context) {
         this(context, null);
     }
@@ -79,7 +71,7 @@ public class CastingBoardView extends View {
 
         super(context, attrs);
         channeledElement = new ArrayList<>();
-        loadGraphics();
+
 
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
@@ -96,21 +88,6 @@ public class CastingBoardView extends View {
         mBlur = new BlurMaskFilter(10, BlurMaskFilter.Blur.NORMAL);
     }
 
-    private void loadGraphics() {
-        fireDrawable = BitmapFactory.decodeResource(getResources(),
-                R.drawable.fire);
-
-        waterDrawable = BitmapFactory.decodeResource(getResources(),
-                R.drawable.water);
-
-        lightningDrawable = BitmapFactory.decodeResource(getResources(),
-                R.drawable.lightning);
-
-        earthDrawable = BitmapFactory.decodeResource(getResources(),
-                R.drawable.earth);
-
-
-    }
 
     public void init(DisplayMetrics metrics) {
         int height = metrics.heightPixels;
