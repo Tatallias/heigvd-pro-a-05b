@@ -188,6 +188,11 @@ public class Util {
         return Float.parseFloat(fullString);
     }
 
+    /**
+     * recreates an Android.Path from an array of vector
+     * @param vectors the given vector array
+     * @return the created path based on the array of vector
+     */
     public static Path pathFromVectorArray(Vector2[] vectors){
         Path p = new Path();
         if(vectors.length>0) {
@@ -200,6 +205,12 @@ public class Util {
     }
 
 
+    /**
+     * subdivides an android path into Vector2's representing the positions along the path
+     * @param p the path to subdivide
+     * @param subDiv the number of segments
+     * @return an array of the positions along that path of size subDiv
+     */
     public static Vector2[] pathToVectorArray(Path p,int subDiv){
         PathMeasure pm = new PathMeasure(p, false);
 

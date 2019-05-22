@@ -29,16 +29,20 @@ public class Handler extends Thread implements Serializable {
     private String serverAddress;
     private boolean running;
 
-    private GameActivity gameActivity ;
+    private GameActivity gameActivity;
 
     public Handler(String serverAddress, int serverPort, GameActivity gameActivity) {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
-        this.gameActivity= gameActivity;
+        this.gameActivity = gameActivity;
         running = true;
     }
 
 
+    /**
+     * opens a socket communicating with the server and sends READY to confirm the setup to the server.
+     * then waits for the answer from the server telling us which player we are and sets up the player id text .
+     */
     private void connect() {
         try {
 
@@ -50,15 +54,12 @@ public class Handler extends Thread implements Serializable {
             output.flush();
             final String answer = input.readLine();
 
-                gameActivity.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                      gameActivity.setPlayerIdText(Integer.parseInt(answer));
-                    }
-                });
-
-
-
+            gameActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    gameActivity.setPlayerIdText(Integer.parseInt(answer));
+                }
+            });
 
 
         } catch (IOException e) {
@@ -69,6 +70,10 @@ public class Handler extends Thread implements Serializable {
 
     }
 
+    /**
+     * adds a request to be sent to the server
+     * @param in the request we want to send
+     */
     public void request(String in) {
         this.in = in;
     }
@@ -94,14 +99,6 @@ public class Handler extends Thread implements Serializable {
         if (output != null) {
             output.close();
         }
-    }
-
-    public int getSeverPort() {
-        return serverPort;
-    }
-
-    public String getServerAddress() {
-        return serverAddress;
     }
 
     @Override
