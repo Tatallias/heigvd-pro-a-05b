@@ -133,7 +133,7 @@ public class GameActivity extends AppCompatActivity {
             handler.start();
         }
     }
-    public void setPlayerId(int i){
+    public  void setPlayerId(int i){
         TextView playerId= (TextView) findViewById(R.id.PlayerId);
         playerId.setText("player "+i);
     }

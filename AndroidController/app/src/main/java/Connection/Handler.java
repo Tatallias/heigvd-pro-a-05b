@@ -1,6 +1,8 @@
 package Connection;
 
 
+import android.view.View;
+
 import com.example.Wizards.GameActivity;
 
 import java.io.BufferedReader;
@@ -41,14 +43,24 @@ public class Handler extends Thread implements Serializable {
 
     private void connect() {
         try {
-            //gameActivity.setPlayerId(1);
+
             Socket clientSocket = new Socket(serverAddress, serverPort);
             input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             output = new PrintWriter(clientSocket.getOutputStream());
             connected = true;
             output.println("READY");
             output.flush();
-            //   String answer = input.readLine();
+            final String answer = input.readLine();
+
+                gameActivity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                      gameActivity.setPlayerId(Integer.parseInt(answer));
+                    }
+                });
+
+
+            gameActivity.setPlayerId(Integer.parseInt(answer));
 
 
         } catch (IOException e) {
