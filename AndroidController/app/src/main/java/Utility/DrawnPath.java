@@ -1,4 +1,4 @@
-package com.example.painttest;
+package Utility;
 import android.graphics.Path;
 
 public class DrawnPath {

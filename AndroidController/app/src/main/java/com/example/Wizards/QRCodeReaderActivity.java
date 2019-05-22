@@ -1,9 +1,11 @@
-package com.example.painttest;
+package com.example.Wizards;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+
 import Connection.Handler;
+
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.util.SparseArray;
@@ -18,8 +20,15 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
+/**
+ * the connection/qr reading activity that scans for a qr code containing
+ * the ips of the host server and attempts to set up a connection. if it succeeds to do so with one of the ips
+ * sends the correct one to the game activity
+ */
 public class QRCodeReaderActivity extends AppCompatActivity {
 
     private CameraSource cam;
@@ -63,7 +72,11 @@ public class QRCodeReaderActivity extends AppCompatActivity {
                     if (!scannedHostIPS.equals(hostIPs)) {
                         hostIPs = scannedHostIPS;
 
-                        tryConnection(hostIPs);
+                        if(!tryConnection(hostIPs)){
+                            onBackPressed();
+                        }
+
+
                     }
                 }
             }
@@ -76,26 +89,38 @@ public class QRCodeReaderActivity extends AppCompatActivity {
         }
     }
 
-    void tryConnection(String ipsAndPort){
-        String[] splitIpsAndPort= ipsAndPort.split("\n");
-        String[] ips= splitIpsAndPort[0].split(" ");
+    /**
+     * Parses the string containing the ips and port from the qr code and tries to connect to each of them
+     *
+     * @param ipsAndPort the string of ips and port "<ip1> <ip2> ... <ipn>\n<port>"
+     */
+    private boolean tryConnection(String ipsAndPort) {
+        String[] splitIpsAndPort = ipsAndPort.split("\n");
+        String[] ips = splitIpsAndPort[0].split(" ");
         int port = Integer.parseInt(splitIpsAndPort[1]);
 
-        for (String s:ips) {
+        for (String s : ips) {
 
-            try(Socket socket= new Socket(s,port)) {
-                startGameActivity(s,port);
-                break;
-            } catch (IOException e) {
+
+            try {
+                Socket socket = new Socket();
+                socket.connect(new InetSocketAddress(s, port), 500);
+                if (socket.isConnected()) {
+                    startGameActivity(s, port);
+                    return true;
+                }
+
+            } catch (Exception e) {
 
             }
         }
+        return false;
     }
 
-    public void validateConnection(Handler h){
-        startGameActivity(h.getServerAddress(),h.getSeverPort());
-    }
 
+    /**
+     * sets up the camera view
+     */
     void cam_view_setup() {
         cam_view.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
@@ -123,22 +148,20 @@ public class QRCodeReaderActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, WelcomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        startActivityIfNeeded(intent,0);
+        startActivityIfNeeded(intent, 0);
         finish();
     }
 
     //start the reading of the QRcode if button pressed
-    public void startGameActivity(String ip,int port) {
+    public void startGameActivity(String ip, int port) {
         Intent intent = new Intent(this, GameActivity.class);
-        intent.putExtra("ip",ip);
-        intent.putExtra("port",port);
+        intent.putExtra("ip", ip);
+        intent.putExtra("port", port);
 
         this.startActivity(intent);
     }
-
-
 
 
 }

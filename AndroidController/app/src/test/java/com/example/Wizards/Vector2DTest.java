@@ -1,7 +1,9 @@
-package com.example.painttest;
+package com.example.Wizards;
 
 
 import org.junit.Test;
+
+import Utility.Vector2;
 
 import static org.junit.Assert.*;
 

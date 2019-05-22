@@ -1,6 +1,5 @@
-package com.example.painttest;
+package com.example.Wizards;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,12 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.Toast;
 
+import Utility.Util;
 
-
-public class MainActivity extends AppCompatActivity {
+/**
+ * The welcome screen activity with a button to open the qr scan/join Activity
+ */
+public class WelcomeActivity extends AppCompatActivity {
 
     static final int PERMISSIONS_REQUEST=1;
     private Activity thisActivity;
@@ -47,7 +47,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //start the reading of the QRcode if button pressed
+    /**
+     * Statrt the qr codeReaderActivity or directly launches the game if running on emulator(for testing purposes)
+     * @param view
+     */
     public void StartQRCodeReaderActivity(View view) {
 
         if( !Util.isEmulator()){

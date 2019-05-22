@@ -1,7 +1,7 @@
 package Connection;
 
 
-import com.example.painttest.QRCodeReaderActivity;
+import com.example.Wizards.GameActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,10 +9,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * class managing all the communication with the with the server
+ */
 
 
 public class Handler extends Thread implements Serializable {
@@ -23,29 +25,42 @@ public class Handler extends Thread implements Serializable {
     int serverPort;
     boolean connected = false;
     String in;
+    private int playerNumber = 0;
     private String serverAddress;
     private boolean running;
-    QRCodeReaderActivity connectionActivity=null;
 
+    private GameActivity gameActivity;
 
-    public Handler(String serverAddress, int serverPort) {
+    public Handler(String serverAddress, int serverPort, GameActivity gameActivity) {
         this.serverAddress = serverAddress;
         this.serverPort = serverPort;
-
+        this.gameActivity = gameActivity;
         running = true;
     }
 
 
-
-
+    /**
+     * opens a socket communicating with the server and sends READY to confirm the setup to the server.
+     * then waits for the answer from the server telling us which player we are and sets up the player id text .
+     */
     private void connect() {
         try {
-            Socket clientSocket= new Socket(serverAddress,serverPort);
+
+            Socket clientSocket = new Socket(serverAddress, serverPort);
             input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             output = new PrintWriter(clientSocket.getOutputStream());
             connected = true;
             output.println("READY");
             output.flush();
+            final String answer = input.readLine();
+
+            gameActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    gameActivity.setPlayerIdText(Integer.parseInt(answer));
+                }
+            });
+
 
         } catch (IOException e) {
             LOG.log(Level.SEVERE, "Unable to connect to server: {0}", e.getMessage());
@@ -55,11 +70,10 @@ public class Handler extends Thread implements Serializable {
 
     }
 
-    public void confirmConnection(){
-        if(connectionActivity!=null){
-            connectionActivity.validateConnection(this);
-        }
-    }
+    /**
+     * adds a request to be sent to the server
+     * @param in the request we want to send
+     */
     public void request(String in) {
         this.in = in;
     }
@@ -87,22 +101,14 @@ public class Handler extends Thread implements Serializable {
         }
     }
 
-    public int getSeverPort() {
-        return serverPort;
-    }
-
-    public String getServerAddress() {
-        return serverAddress;
-    }
-
     @Override
 
     public void run() {
-        if(!connected) {
+        if (!connected) {
             connect();
         }
         while (running) {
-            if(in != null) {
+            if (in != null) {
                 output.println(in);
                 output.flush();
                 in = null;

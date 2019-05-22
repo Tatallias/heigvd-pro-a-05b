@@ -1,14 +1,15 @@
-package com.example.painttest;
+package Utility;
 
 import android.graphics.Path;
 import android.graphics.PathMeasure;
 import android.os.Build;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
+/**
+ * A class containing multiples Utilities variables and methods
+ */
 public class Util {
 
     public static int directAttackDistance=10000;
@@ -29,9 +30,22 @@ public class Util {
     float prevYControl;
 
 
+    /**
+     *  parses the svg string to a Path
+     * @param svgDesc the svgDescription
+     * @return the built Path
+     */
     public Path pathFromSVGPath(String svgDesc){
         return pathFromSVGPath(svgDesc,0,0);
     }
+
+    /**
+     * parses the svg string to a Path starting at a specific location
+     * @param svgDesc the svg string
+     * @param x the x position
+     * @param y the y position
+     * @return the built path
+     */
     public Path pathFromSVGPath(String svgDesc,float x, float y){
 
 
@@ -174,6 +188,11 @@ public class Util {
         return Float.parseFloat(fullString);
     }
 
+    /**
+     * recreates an Android.Path from an array of vector
+     * @param vectors the given vector array
+     * @return the created path based on the array of vector
+     */
     public static Path pathFromVectorArray(Vector2[] vectors){
         Path p = new Path();
         if(vectors.length>0) {
@@ -186,6 +205,12 @@ public class Util {
     }
 
 
+    /**
+     * subdivides an android path into Vector2's representing the positions along the path
+     * @param p the path to subdivide
+     * @param subDiv the number of segments
+     * @return an array of the positions along that path of size subDiv
+     */
     public static Vector2[] pathToVectorArray(Path p,int subDiv){
         PathMeasure pm = new PathMeasure(p, false);
 
@@ -206,6 +231,10 @@ public class Util {
         return result;
     }
 
+    /**
+     * returns whether or not the app is running in an emulator*
+     * @return true if in emulator or false if it isn't
+     */
     public static boolean isEmulator() {
         return Build.FINGERPRINT.startsWith("generic")
                 || Build.FINGERPRINT.startsWith("unknown")
