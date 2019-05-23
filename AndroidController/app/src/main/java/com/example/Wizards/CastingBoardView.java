@@ -33,6 +33,11 @@ import Connection.Handler;
 import Spell.*;
 import Utility.DrawnPath;
 
+
+/**
+ * The casting board view where the player draws the spells
+ *
+ */
 public class CastingBoardView extends View {
 
 
@@ -66,6 +71,12 @@ public class CastingBoardView extends View {
         this(context, null);
     }
 
+
+    /**
+     * constructs the casting board view and sets the default values for all the attributes
+     * @param context the activity context
+     * @param attrs the attributes of the view
+     */
     public CastingBoardView(Context context, AttributeSet attrs) {
 
 
@@ -100,18 +111,24 @@ public class CastingBoardView extends View {
         strokeWidth = BRUSH_SIZE;
     }
 
+    /**
+     * sets the client handler to the given handler
+     * @param handler the connection handler set up to communicate with the server
+     */
     public void connect(Handler handler) {
         client = handler;
-
-
     }
 
 
+    /**
+     * clear the drawn path(s)
+     */
     public void clear() {
         mCanvas.drawColor(backgroundColor, PorterDuff.Mode.CLEAR);
         paths.clear();
         invalidate();
     }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -138,6 +155,11 @@ public class CastingBoardView extends View {
     }
 
 
+    /**
+     * creates a new path starting at pos (x,y) when a new touch happens
+     * @param x the x pos in pixel of the touch
+     * @param y the y pos in pixel of the touch
+     */
     private void touchStart(float x, float y) {
         showPath=false;
         setUpParticleEmitter();
@@ -153,6 +175,12 @@ public class CastingBoardView extends View {
         mY = y;
     }
 
+    /**
+     * adds to the currently drawn path if  the distance between this and the last position is greater than
+     * TOUCH_TOLERANCE
+     * @param x the x pos in pixel of the touch
+     * @param y the y pos in pixel of the touch
+     */
     private void touchMove(float x, float y) {
         float dx = Math.abs(x - mX);
         float dy = Math.abs(y - mY);
@@ -166,6 +194,10 @@ public class CastingBoardView extends View {
         }
     }
 
+    /**
+     * Ends a path when we lift the finger from the screen and computes the corresponding
+     * spell. then proceeds to cast it
+     */
     private void touchUp() {
         showPath=true;
         particleSystem.stopEmitting();
@@ -175,6 +207,7 @@ public class CastingBoardView extends View {
             castSpell(result);
         }
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -203,6 +236,12 @@ public class CastingBoardView extends View {
         return true;
     }
 
+    /**
+     * if the spell is a channeled Element adds it to the channeled element list
+     * otherwise empties it
+     * also sends the request to be transmitted to the server
+     * @param s the spell to cast
+     */
     private void castSpell(Spell s) {
         if (s instanceof ChanneledElement) {
             addChanneledElement((ChanneledElement) s);
@@ -213,10 +252,19 @@ public class CastingBoardView extends View {
         client.request(s.getRequest());
     }
 
+    /**
+     * host activity setter
+     * @param hostAct
+     */
     public void setHostActivity(Activity hostAct) {
         hostActivity = hostAct;
 
     }
+
+
+    /**
+     * Creates a new Particle emitter
+     */
     public void setUpParticleEmitter(){
         particleSystem= new ParticleSystem(hostActivity, 100,R.drawable.sparkle2, 250l);
         particleSystem.setFadeOut(100l);
@@ -225,6 +273,10 @@ public class CastingBoardView extends View {
     }
 
 
+    /**
+     * adds the newly channeled element to the screen
+     * @param e
+     */
     public void addChanneledElement(ChanneledElement e){
 
         if(channeledElement.size()<=3 ){
@@ -232,12 +284,21 @@ public class CastingBoardView extends View {
             channeledElementImageViews.get(channeledElement.size()-1).setImageResource(e.getElement().getDrawableId());
         }
     }
+
+    /**
+     * clears all channeled elements from the screen
+     */
     public void emptyChanneledElement(){
         channeledElement.clear();
         for (ImageView i: channeledElementImageViews ) {
             i.setImageResource(android.R.color.transparent);
         }
     }
+
+    /**
+     * channeledElementImageViews setter
+     * @param i the new channeledElementImageViews
+     */
     public void setChanneledElementImageViews(List<ImageView > i){
         channeledElementImageViews=i;
     }
