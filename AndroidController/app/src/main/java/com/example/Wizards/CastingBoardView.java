@@ -269,7 +269,7 @@ public class CastingBoardView extends View {
         particleSystem= new ParticleSystem(hostActivity, 100,R.drawable.sparkle2, 250l);
         particleSystem.setFadeOut(100l);
         particleSystem.setScaleRange(0.5f,.75f);
-        particleSystem.setSpeedRange(0.17f, 0.3f);
+        particleSystem.setSpeedRange(0.09f, 0.17f);
     }
 
 

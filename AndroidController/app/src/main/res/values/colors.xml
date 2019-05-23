@@ -12,7 +12,7 @@
 
     <color name="orangedark">#000000</color>
 
-    <color name="textColorMain">#cdcdcd</color>
+    <color name="textColorMain">#CDCDCD</color>
 
     <color name="backgroundSeethrough">#a02b2b2b</color>
 </resources>
