@@ -101,13 +101,14 @@ public class Handler extends Thread implements Serializable {
         }
     }
 
-    @Override
 
+    @Override
     public void run() {
         if (!connected) {
             connect();
         }
         while (running) {
+
             if (in != null) {
                 output.println(in);
                 output.flush();

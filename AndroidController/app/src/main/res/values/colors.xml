@@ -8,11 +8,11 @@
 
     <color name="backgroundLight">#222222</color>
 
-    <color name="background">#2b2b2b</color>
+    <color name="background">#3B3A3A</color>
 
-    <color name="orangedark">#BB6008</color>
+    <color name="orangedark">#000000</color>
 
-    <color name="textColorMain">#cdcdcd</color>
+    <color name="textColorMain">#CDCDCD</color>
 
     <color name="backgroundSeethrough">#a02b2b2b</color>
 </resources>

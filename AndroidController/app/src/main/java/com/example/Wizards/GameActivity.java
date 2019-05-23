@@ -135,6 +135,11 @@ public class GameActivity extends AppCompatActivity {
             handler.start();
         }
     }
+
+    /**
+     * sets the player Id text on the Game activity screen
+     * @param i the id of the player
+     */
     public  void setPlayerIdText(int i){
         playerId= i;
         TextView playerId= (TextView) findViewById(R.id.PlayerId);
