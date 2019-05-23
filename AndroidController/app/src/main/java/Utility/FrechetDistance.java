@@ -1,9 +1,5 @@
 package Utility;
 
-
-
-
-
 /**
  * class used to compute the frechet distance between two discrete paths
  * implementing the algorithm described in this paper http://www.kr.tuwien.ac.at/staff/eiter/et-archive/cdtr9464.pdf

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PaintTest</string>
+    <string name="app_name">WizarDraw</string>
     <string name="action_settings">Settings</string>
 
 
@@ -9,7 +9,7 @@
 
     <string name="title_activity_host">HostActivity</string>
 
-    <string name="WelcomeScreenTitle">Awsome game with magic!</string>
+    <string name="WelcomeScreenTitle">WIZARD FIGHT!</string>
 
     <string name="powered_app">Team A05 </string>
 

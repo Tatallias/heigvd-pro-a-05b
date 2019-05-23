@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
-        android:background="@mipmap/fantasy"
+        android:background="@drawable/welcomescreenbg"
         android:orientation="vertical"
         tools:context="WelcomeScreen"
         tools:layout_editor_absoluteX="8dp"
@@ -27,21 +27,31 @@
 
             android:orientation="horizontal">
 
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
             <TextView
                 android:id="@+id/Title"
                 android:layout_width="wrap_content"
-                android:layout_height="154dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:shadowColor="@android:color/holo_orange_dark"
                 android:shadowDx="0.0"
                 android:shadowDy="0.0"
                 android:shadowRadius="0.00000001"
-                android:text="@string/WelcomeScreenTitle"
+                android:text="@string/app_name"
                 android:textAlignment="center"
-                android:textColor="@color/background"
+                android:textColor="@color/orangedark"
                 android:textSize="@android:dimen/app_icon_size"
                 android:textStyle="bold|italic" />
-                tools:text="@string/WelcomeScreenTitle" />
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+            tools:text="@string/WelcomeScreenTitle" />
         </LinearLayout>
 
         <LinearLayout
